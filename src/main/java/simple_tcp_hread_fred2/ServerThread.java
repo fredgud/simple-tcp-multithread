@@ -21,7 +21,6 @@ public class ServerThread implements Runnable {
         try {
 
             int client_number = server_main.getClientNumber();
-
             System.out.println("Client " + client_number + " has connected.");
 
             // I/O buffers
@@ -34,19 +33,25 @@ public class ServerThread implements Runnable {
                     true
             );
 
-            out_socket.println(
-                    "Welcome! You are client number " + client_number + ". What's your name? "
-            );
+            // Saludo especial si el ID es par
+            String saludo;
+            if (client_number % 2 == 0) {
+                saludo = "Welcome! You are client number " + client_number
+                        + ". You have a lot of luck 🍀. What's your name?";
+            } else {
+                saludo = "Welcome! You are client number " + client_number
+                        + ". What's your name?";
+            }
+
+            out_socket.println(saludo);
 
             String message = in_socket.readLine(); // receive Client's message
-            System.out.println("Client says: " + message); // display Client's message in the console
+            System.out.println("Client " + client_number + " says: " + message);
 
             socket.close();
-
             System.out.println("Client " + client_number + " has disconnected.");
 
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }
