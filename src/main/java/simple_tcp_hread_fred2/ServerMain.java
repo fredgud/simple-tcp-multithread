@@ -5,31 +5,29 @@ import java.net.Socket;
 
 public class ServerMain {
 
-    private int clientnumber = 1;
+    private int numeroCliente = 1;
 
     public ServerMain() throws Exception {
 
-        ServerSocket server_socket = new ServerSocket(2020);
-        System.out.println("Port 2020 is now open.");
+        ServerSocket socketServidor = new ServerSocket(2020);
+        System.out.println("Servidor escuchando en el puerto 2020...");
 
-        // infinite while loop: wait for new connections
         while (true) {
-            Socket socket = server_socket.accept();
-            ServerThread server_thread = new ServerThread(socket, this);
-            Thread thread = new Thread(server_thread);
-            thread.start();
+            Socket socketCliente = socketServidor.accept();
+            ServerThread hiloServidor = new ServerThread(socketCliente, this);
+            Thread hilo = new Thread(hiloServidor);
+            hilo.start();
         }
     }
 
-    public int getClientNumber() {
-        return clientnumber++;
+    public synchronized int obtenerNumeroCliente() {
+        return numeroCliente++;
     }
 
     public static void main(String[] args) {
         try {
             new ServerMain();
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }
